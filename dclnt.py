@@ -2,33 +2,38 @@ import ast
 import os
 import collections
 
-from nltk import pos_tag
-
+from nltk import pos_tag, word_tokenize, punkt
 
 def flat(_list):
-    """ [(1,2), (3,4)] -> [1, 2, 3, 4]"""
-    return sum([list(item) for item in _list], [])
+    return list(sum(_list,()))
 
-
-def is_verb(word):
-    if not word:
+def is_verb(word = None):
+    if word is None:
         return False
-    pos_info = pos_tag([word])
-    return pos_info[0][1] == 'VB'
+    else:
+        pos_info = pos_tag(word_tokenize(word))
+        return pos_info[0][1] in ('VB', 'VBD', 'VBZ', 'VBN')
 
 Path = ''
 
-def get_trees(_path, with_filenames=False, with_file_content=False):
-    filenames = []
+def only_py_extention(file, from_path):
+    if file.endswith('.py'):
+        return os.path.join(from_path, file)
+
+def find_py_files(from_path = Path):
+    py_files_list = []
+    for whole_path, dirs, files in os.walk(from_path, topdown = True):
+        for each_file in files:
+            py_files_list.append(only_py_extention(each_file, whole_path))
+            if len(py_files_list) == 100:
+                break
+    py_files_list = filter(None, py_files_list)
+    print('Total finded *.py files amount is: %s' % len(py_files_list))
+    return py_files_list
+
+def get_trees(_path, with_filenames = False, with_file_content = False):
+    filenames = find_py_files()
     trees = []
-    path= Path
-    for dirname, dirs, files in os.walk(path, topdown=True):
-        for file in files:
-            if file.endswith('.py'):
-                filenames.append(os.path.join(dirname, file))
-                if len(filenames) == 100:
-                    break
-    print('total %s files' % len(filenames))
     for filename in filenames:
         with open(filename, 'r', encoding='utf-8') as attempt_handler:
             main_file_content = attempt_handler.read()
@@ -95,3 +100,5 @@ top_size = 200
 print('total %s words, %s unique' % (len(wds), len(set(wds))))
 for word, occurence in collections.Counter(wds).most_common(top_size):
     print(word, occurence)
+
+
