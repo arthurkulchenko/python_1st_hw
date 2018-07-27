@@ -31,7 +31,7 @@ def find_py_files(from_path = Path):
     print('Total finded *.py files amount is: %s' % len(py_files_list))
     return py_files_list
 
-def get_trees(_path, with_filenames = False, with_file_content = False):
+def get_trees(path = Path, with_filenames = False, with_file_content = False):
     filenames = find_py_files()
     trees = []
     for filename in filenames:
@@ -85,13 +85,13 @@ def get_top_functions_names_in_path(path, top_size=10):
 
 wds = []
 projects = [
-    'django',
-    'flask',
-    'pyramid',
-    'reddit',
-    'requests',
-    'sqlalchemy',
-]
+             'django',
+             'flask',
+             'pyramid',
+             'reddit',
+             'requests',
+             'sqlalchemy',
+            ]
 for project in projects:
     path = os.path.join('.', project)
     wds += get_top_verbs_in_path(path)
