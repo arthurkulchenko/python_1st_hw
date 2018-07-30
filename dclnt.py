@@ -16,7 +16,7 @@ def flattening(l):
 def flatten(array):
     return [arr for arr in flattening(array)]
 
-def flatting_tuple(_list):
+def flattening_tuple(_list):
     return list(sum(_list,()))
 
 def is_verb(word = None):
@@ -61,31 +61,30 @@ def get_trees(with_files = False, with_file_content = False):
             trees.append(tree)
     print('trees generated')
     return trees
-
+# OPERATOIN AT FUNCTION NAMES
 def get_verbs_from_function_name(function_name):
     return [word for word in function_name.split('_') if is_verb(word)]
-
-def is_private_filter(thing):
+# FILTER CHECKING IS A METHOT IS PRIVATE
+def is_private_filter_and_stringify(thing):
     if True:
     # if thing.__class__.__name__.startswith('__') and thing.__class__.__name__.endswith('__'):
-        print thing
-        return thing
-
-def is_functionDef_in_lowcase_filter(node):
+        # print thing.__class__.__name__
+        return "%s" %thing.__class__.__name__
+# FILTER OF A AST OBJECTS
+def is_astFunction_instance_filter(node):
     if isinstance(node, ast.FunctionDef):
         return node.name.lower()
-
+# FILTER FOR ARRAYS
 def is_none_filter(array):
-    node_list = [map(is_functionDef_in_lowcase_filter(y), ast.walk(y)) for y in array]
+    node_list = [map(is_astFunction_instance_filter(y), ast.walk(y)) for y in array]
     return filter(None, node_list)
-
+# SCOPE METHOD 
 def get_top_verbs_in_path(top_size=10):
     flatten_arr = flatten(is_none_filter(get_trees()))
-    folll = flatten_arr
-    # fncs = [is_private_filter(f) for f in flatten_arr]
-    # fncs = filter(None, fncs)
+    fncs = [is_private_filter_and_stringify(f) for f in flatten_arr]
+    fncs = filter(None, fncs)
     print('functions extracted')
-    verbs = flatting_tuple([get_verbs_from_function_name(function_name) for function_name in fncs])
+    verbs = flattening([get_verbs_from_function_name(function_name) for function_name in fncs])
     return collections.Counter(verbs).most_common(top_size)
 
 def some_wierd_stuff():
@@ -115,10 +114,10 @@ for word, occurence in collections.Counter(wds).most_common(top_size):
 #
 # def split_snake_case_name_to_words(name):
 #     return [n for n in name.split('_') if n]
-#     return flatting_tuple([split_snake_case_name_to_words(function_name) for function_name in function_names])
+#     return flattening_tuple([split_snake_case_name_to_words(function_name) for function_name in function_names])
 
 # def get_top_functions_names_in_path(path, top_size=10):
 #     t = get_trees(path)
-#     nms = [f for f in flatting_tuple([[node.name.lower() for node in ast.walk(t) if isinstance(node, ast.FunctionDef)] for t in t]) if not (f.startswith('__') and f.endswith('__'))]
+#     nms = [f for f in flattening_tuple([[node.name.lower() for node in ast.walk(t) if isinstance(node, ast.FunctionDef)] for t in t]) if not (f.startswith('__') and f.endswith('__'))]
 #     return collections.Counter(nms).most_common(top_size)
 
