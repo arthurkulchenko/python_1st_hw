@@ -86,7 +86,6 @@ def get_common_verbs_across(path, projects):
     for word, occurence in the_most_common(words):
         print(word, occurence)
 
-# UNUSED
 def get_all_names(trees):
     for t in trees:
         names = [ node.id for node in ast.walk(t) if isinstance(node, ast.Name)]
@@ -94,10 +93,14 @@ def get_all_names(trees):
 
 def puts(smth):
     print smth
-#
-# def split_snake_case_name_to_words(name):
-#     return [n for n in name.split('_') if n]
-#     return flattening([split_snake_case_name_to_words(function_name) for function_name in function_names])
+
+def split_snake_case_name_to_words(name):
+    nested_array = [n.split('_') for n in name]
+    return list(flattening(nested_array))
+    # return [ list(flattening(i)) for i in nested_array]
+
+    # return flattening(nested_array)
+    # return flattening([split_snake_case_name_to_words(function_name) for function_name in nested_array])
     
 
 

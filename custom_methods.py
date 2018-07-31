@@ -26,4 +26,5 @@ def is_none_filter(array):
 # FILTERING
 def filter_only_py_extention(file, from_path):
     if file.endswith('.py'):
+        print file
         return os.path.join(from_path, file)
