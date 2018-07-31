@@ -1,4 +1,3 @@
-# OPERATION AT LISTS
 def flattening(l):
     if type(l) == 'List':
         for el in l:
@@ -10,7 +9,6 @@ def flattening(l):
     else:
         return list(sum(_list,()))
 
-# OPERATION AT STRINGS
 def is_verb(word = None):
     if word is None:
         return False
@@ -18,12 +16,10 @@ def is_verb(word = None):
         pos_info = pos_tag(word_tokenize(word))
         return pos_info[0][1] in ('VB', 'VBD', 'VBZ', 'VBN')
 
-# FILTER FOR ARRAYS
 def is_none_filter(array):
     node_list = [map(is_astFunction_instance_filter(y), ast.walk(y)) for y in array]
     return filter(None, node_list)
     
-# FILTERING
 def filter_only_py_extention(file, from_path):
     if file.endswith('.py'):
         print file

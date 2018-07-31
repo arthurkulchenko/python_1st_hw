@@ -16,7 +16,7 @@ def is_none_filter(array):
 
 def filter_only_py_extention(file, from_path):
     custom_methods.filter_only_py_extention(file, from_path)
-# SEARCHING
+
 def find_py_files(from_path = Path):
     files_list = []
     for whole_path, dirs, files in os.walk(from_path, topdown = True):
@@ -27,7 +27,7 @@ def find_py_files(from_path = Path):
     files_list = filter(None, files_list)
     print('Total finded *.py files amount is: %s' % len(files_list))
     return files_list
-# SEARCHING
+
 def get_trees(files, with_files = False, with_file_content = False):
     trees = []
     for file in files:
@@ -47,7 +47,7 @@ def get_trees(files, with_files = False, with_file_content = False):
             trees.append(tree)
     print('trees generated')
     return trees
-# OPERATOIN AT FUNCTION NAMES
+
 def get_verbs_from_function_name(function_name):
     return [word for word in function_name.split('_') if is_verb(word)]
 
@@ -67,7 +67,8 @@ def get_common_verbs(trees):
     fncs = [is_private_filter_and_stringify(f) for f in flatten_array]
     fncs = filter(None, fncs)
     print('functions extracted')
-    return flattening([get_verbs_from_function_name(function_name) for function_name in fncs])
+    generator = flattening([get_verbs_from_function_name(function_name) for function_name in fncs])
+    return list(generator)
 
 def the_most_common(objects, top_size=10):
     return collections.Counter(objects).most_common(top_size)
@@ -91,16 +92,9 @@ def get_all_names(trees):
         names = [ node.id for node in ast.walk(t) if isinstance(node, ast.Name)]
     return filter(None, names)
 
-def puts(smth):
-    print smth
-
 def split_snake_case_name_to_words(name):
     nested_array = [n.split('_') for n in name]
     return list(flattening(nested_array))
-    # return [ list(flattening(i)) for i in nested_array]
-
-    # return flattening(nested_array)
-    # return flattening([split_snake_case_name_to_words(function_name) for function_name in nested_array])
     
 
 
