@@ -4,6 +4,7 @@ import collections
 from nltk import pos_tag, word_tokenize, punkt
 import constants
 import custom_methods
+import unused
 
 def flattening(array):
     custom_methods.flattening(array)
@@ -47,19 +48,21 @@ def get_trees(files, with_files = False, with_file_content = False):
             trees.append(tree)
     print('trees generated')
     return trees
-
-def get_verbs_from_function_name(function_name):
-    return [word for word in function_name.split('_') if is_verb(word)]
+def __test_method__():
+    print "Hello"
 
 def is_private_filter_and_stringify(thing):
-    if True:
     # FIX no clearly understood conditions 
-    # if thing.__class__.__name__.startswith('__') and thing.__class__.__name__.endswith('__'):
-        # print thing.__class__.__name__
+    if thing.__class__.__name__.startswith('__') and thing.__class__.__name__.endswith('__'):
+        print thing.__class__.__name__
         return "%s" %thing.__class__.__name__
-# FILTER OF A AST OBJECTS
-def is_astFunction_instance_filter(node):
+
+def is_ast_Function_instance_filter(node):
     if isinstance(node, ast.FunctionDef):
+        return node.name.lower()
+
+def is_ast_Name_instance_filter(node):
+    if isinstance(node, ast.Name):
         return node.name.lower()
 
 def get_common_verbs(trees):
@@ -70,31 +73,20 @@ def get_common_verbs(trees):
     generator = flattening([get_verbs_from_function_name(function_name) for function_name in fncs])
     return list(generator)
 
-def the_most_common(objects, top_size=10):
-    return collections.Counter(objects).most_common(top_size)
-
 def cascade_call(path):
     py_files = find_py_files(path)
     trees = get_trees(py_files)
     return get_common_verbs(trees)
-# NOT FINISHED
-def get_common_verbs_across(path, projects):
+
+def get_common_verbs_across(projects):
     words = []
     for project in projects:
-        # path = os.path.join('.', project)
+        path = os.path.join('.', project)
         words.append(cascade_call(path))
     print('total %s words, %s unique' % (len(words), len(set(words))))
     for word, occurence in the_most_common(words):
         print(word, occurence)
 
-def get_all_names(trees):
-    for t in trees:
-        names = [ node.id for node in ast.walk(t) if isinstance(node, ast.Name)]
-    return filter(None, names)
-
-def split_snake_case_name_to_words(name):
-    nested_array = [n.split('_') for n in name]
-    return list(flattening(nested_array))
-    
-
+def get_verbs_from_function_name(function_name):
+    return [word for word in function_name.split('_') if is_verb(word)]
 

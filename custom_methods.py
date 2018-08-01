@@ -17,10 +17,13 @@ def is_verb(word = None):
         return pos_info[0][1] in ('VB', 'VBD', 'VBZ', 'VBN')
 
 def is_none_filter(array):
-    node_list = [map(is_astFunction_instance_filter(y), ast.walk(y)) for y in array]
+    node_list = [map(is_ast_Function_instance_filter(y), ast.walk(y)) for y in array]
     return filter(None, node_list)
     
 def filter_only_py_extention(file, from_path):
     if file.endswith('.py'):
         print file
         return os.path.join(from_path, file)
+
+def the_most_common(objects, top_size=10):
+    return collections.Counter(objects).most_common(top_size)
