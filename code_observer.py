@@ -2,6 +2,7 @@ import ast
 import os
 from constants import Path
 import custom_methods
+import logging
 
 
 def flattening(array):
@@ -36,11 +37,11 @@ def find_py_files(from_path=Path):
             if len(files_list) >= 100:
                 break
     files_list = filter(None, files_list)
-    print('Total finded *.py files amount is: %s' % len(files_list))
+    logging.info('Total finded *.py files amount is: %s' % len(files_list))
     return files_list
 
 
-def get_trees(files, with_files=False, with_file_content=False):
+def get_trees(files):
     trees = []
     for file in files:
         with open(file, 'r') as file_viewer:
@@ -50,14 +51,8 @@ def get_trees(files, with_files=False, with_file_content=False):
         except SyntaxError as e:
             print(e)
             tree = None
-        if with_files:
-            if with_file_content:
-                trees.append((file, file_content, tree))
-            else:
-                trees.append((file, tree))
-        else:
-            trees.append(tree)
-    print('trees generated')
+        trees.append(tree)
+    logging.info('trees generated')
     return trees
 
 
@@ -66,18 +61,18 @@ def __test_method__():
 
 
 def is_private_filter_and_stringify(thing):
-    # FIX no clearly understood conditions
-    if thing.__class__.__name__.startswith('__') and thing.__class__.__name__.endswith('__'):
-        print thing.__class__.__name__
-        return "%s" % thing.__class__.__name__
+    if type(thing).__name__.startswith('__'):
+        if type(thing).__name__.endswith('__'):
+            print thing.__class__.__name__
+            return "%s" % thing.__class__.__name__
 
 
 def get_common_verbs(trees):
     flatten_array = flattening(is_none_filter(trees))
-    fncs = [is_private_filter_and_stringify(f) for f in flatten_array]
-    fncs = filter(None, fncs)
-    print('functions extracted')
-    g = flattening([getting_verbs(function_name) for function_name in fncs])
+    functions_list = [is_private_filter_and_stringify(f) for f in flatten_array]
+    functions_list = filter(None, functions_list)
+    logging.info('functions extracted')
+    g = flattening([getting_verbs(function_name) for function_name in functions_list])
     return list(g)
 
 
@@ -92,9 +87,9 @@ def get_common_verbs_across(projects):
     for project in projects:
         path = os.path.join('.', project)
         words.append(cascade_call(path))
-    print('total %s words, %s unique' % (len(words), len(set(words))))
+    logging.info('total %s words, %s unique' % (len(words), len(set(words))))
     for word, occurence in the_most_common(words):
-        print(word, occurence)
+        logging.info(word, occurence)
 
 
 def getting_verbs(function_name):

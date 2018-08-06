@@ -7,8 +7,8 @@ from nltk import pos_tag, word_tokenize
 
 def flattening(l):
     if type(l) == 'List':
-        for el in l:
-            if isinstance(el, collections.Iterable) and not isinstance(el, basestring):
+        for e in l:
+            if isinstance(e, collections.Iterable) and not isinstance(e, basestring):
                 for sub in flattening(el):
                     yield sub
             else:
