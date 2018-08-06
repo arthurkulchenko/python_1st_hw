@@ -1,39 +1,49 @@
 import ast
 import os
-from constants import Path
-import custom_methods
 import logging
+from constants import *
+from support_methods import *
 
 
-def flattening(array):
-    custom_methods.flattening(array)
+# def flattening(array):
+#     support_methods.flattening(array)
 
 
-def is_verb(array=None):
-    custom_methods.is_verb(array)
+# def only_astF_instances(array):
+#     support_methods.only_astF_instances(array)
 
 
-def is_none_filter(array):
-    custom_methods.is_none_filter(array)
+# def filter_only_py(file, from_path):
+#     support_methods.filter_only_py(file, from_path)
 
 
-def filter_only_py_extention(file, from_path):
-    custom_methods.filter_only_py_extention(file, from_path)
+# def the_most_common(objects, top_size=10):
+#     support_methods.the_most_common(objects, top_size=10)
 
 
-def is_ast_Function_instance_filter(node):
-    custom_methods.is_ast_Function_instance_filter(node)
+# def getting_verbs(function_name):
+#     support_methods.getting_verbs(function_name)
 
 
-def the_most_common(objects, top_size=10):
-    custom_methods.the_most_common(objects, top_size=10)
+# def is_private(method):
+#     support_methods.is_private(method)
 
 
-def find_py_files(from_path=Path):
+# def stringify(object):
+#     support_methods.stringify(object)
+
+
+def __test_method__():
+    pass
+
+
+def find_py_files(from_path=None):
+    if from_path == (None or ' ' or ''):
+        from_path = path_setter()
     files_list = []
     for whole_path, dirs, files in os.walk(from_path, topdown=True):
         for file in files:
-            files_list.append(filter_only_py_extention(file, whole_path))
+            files_list.append(filter_only_py(file, whole_path))
             if len(files_list) >= 100:
                 break
     files_list = filter(None, files_list)
@@ -49,31 +59,21 @@ def get_trees(files):
         try:
             tree = ast.parse(file_content)
         except SyntaxError as e:
-            print(e)
+            logging.error(e)
             tree = None
         trees.append(tree)
+    trees = filter(None, trees)
     logging.info('trees generated')
     return trees
 
 
-def __test_method__():
-    print "Hello"
-
-
-def is_private_filter_and_stringify(thing):
-    if type(thing).__name__.startswith('__'):
-        if type(thing).__name__.endswith('__'):
-            print thing.__class__.__name__
-            return "%s" % thing.__class__.__name__
-
-
 def get_common_verbs(trees):
-    flatten_array = flattening(is_none_filter(trees))
-    functions_list = [is_private_filter_and_stringify(f) for f in flatten_array]
+    flatten_array = flattening(only_astF_instances(trees))
+    functions_list = [stringify(is_private(f)) for f in flatten_array]
     functions_list = filter(None, functions_list)
     logging.info('functions extracted')
-    g = flattening([getting_verbs(function_name) for function_name in functions_list])
-    return list(g)
+    g = [getting_verbs(function_name) for function_name in functions_list]
+    return list(flattening(g))
 
 
 def cascade_call(path):
@@ -81,7 +81,7 @@ def cascade_call(path):
     trees = get_trees(py_files)
     return get_common_verbs(trees)
 
-
+#
 def get_common_verbs_across(projects):
     words = []
     for project in projects:
@@ -90,7 +90,3 @@ def get_common_verbs_across(projects):
     logging.info('total %s words, %s unique' % (len(words), len(set(words))))
     for word, occurence in the_most_common(words):
         logging.info(word, occurence)
-
-
-def getting_verbs(function_name):
-    return [word for word in function_name.split('_') if is_verb(word)]
