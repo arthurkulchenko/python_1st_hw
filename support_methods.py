@@ -1,20 +1,20 @@
+import sys
 import os
 import ast
+import re
 import collections
+from constants import *
 from nltk import pos_tag, word_tokenize
 """, punkt"""
 
 
 def flattening(l):
-    if type(l) == 'List':
-        for e in l:
-            if isinstance(e, collections.Iterable) and not isinstance(e, basestring):
-                for sub in flattening(e):
-                    yield sub
-            else:
-                yield e
-    else:
-        return list(sum(l, ()))
+    for e in l:
+        if isinstance(e, collections.Iterable) and not isinstance(e, basestring):
+            for sub in flattening(e):
+                yield sub
+        else:
+            yield e
 
 
 def is_verb(word=None):
@@ -32,6 +32,7 @@ def only_astF_instances(array):
 
 def filter_only_py(file, from_path):
     return os.path.join(from_path, extention_filter(file))
+
 
 def extention_filter(file, extention='.py'):
     if file.endswith(extention):
@@ -54,8 +55,36 @@ def getting_verbs(function_name):
 def is_private(thing):
     if type(thing).__name__.startswith('__'):
         if type(thing).__name__.endswith('__'):
-            return thing.__class__.__name__
+            return type(thing).__name__
 
 
 def stringify(not_a_string):
     return "%s" % not_a_string
+
+
+def getting_file_path(path_with_file):
+    exclusion_regex = "[\/][\w]+['.'][\D]+"
+    dir_path = re.split(exclusion_regex, path_with_file)[0]
+    return dir_path
+
+
+def path_setter(path=sys.argv):
+    global PATH
+    PATH = getting_file_path(os.path.realpath(__file__))
+    print PATH
+    args = []
+    args.append(path)
+    args = filter(None, args)
+    args = list(flattening(args))
+    if len(args) >= 3:
+        if args[1] == '-d':
+            PATH = args[2]
+    else:
+        inputed_value = raw_input('''You didn\'t provide working directory,
+                                     may I offer current directory?: y/n?\n''')
+        if inputed_value == 'y':
+            PATH = getting_file_path(os.path.realpath(__file__))
+        else:
+            inputed_value = raw_input('Please type in the path: \n')
+            PATH = inputed_value
+    return PATH

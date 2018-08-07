@@ -1,36 +1,9 @@
+# import sys
 import ast
-import os
+# import os
 import logging
-from constants import *
+# from constants import *
 from support_methods import *
-
-
-# def flattening(array):
-#     support_methods.flattening(array)
-
-
-# def only_astF_instances(array):
-#     support_methods.only_astF_instances(array)
-
-
-# def filter_only_py(file, from_path):
-#     support_methods.filter_only_py(file, from_path)
-
-
-# def the_most_common(objects, top_size=10):
-#     support_methods.the_most_common(objects, top_size=10)
-
-
-# def getting_verbs(function_name):
-#     support_methods.getting_verbs(function_name)
-
-
-# def is_private(method):
-#     support_methods.is_private(method)
-
-
-# def stringify(object):
-#     support_methods.stringify(object)
 
 
 def __test_method__():
@@ -39,7 +12,9 @@ def __test_method__():
 
 def find_py_files(from_path=None):
     if from_path == (None or ' ' or ''):
-        from_path = path_setter()
+        # from_path = path_setter()
+        from_path = getting_file_path(os.path.realpath(__file__))
+        print from_path
     files_list = []
     for whole_path, dirs, files in os.walk(from_path, topdown=True):
         for file in files:
@@ -90,3 +65,15 @@ def get_common_verbs_across(projects):
     logging.info('total %s words, %s unique' % (len(words), len(set(words))))
     for word, occurence in the_most_common(words):
         logging.info(word, occurence)
+
+
+def cascade():
+    py_files = find_py_files()
+    trees = get_trees(py_files)
+    return get_common_verbs(trees)
+
+common_verbs = cascade()
+print common_verbs
+
+
+

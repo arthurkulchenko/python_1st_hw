@@ -1,19 +1,13 @@
-if __name__ == "constants":
+if __name__ == "__main__":
+    PATH = '~/'
+    TOP_SIZE = 200
+    PROJECTS = [
+           	    'django',
+           	    'flask',
+           	    'pyramid',
+           	    'reddit',
+           	    'requests',
+           	    'sqlalchemy'
+                ]
 
-
-	PATH = ''
-	TOP_SIZE = 200
-	PROJECTS = [
-                	'django',
-                	'flask',
-                	'pyramid',
-                	'reddit',
-                	'requests',
-                	'sqlalchemy',
-            	]
-
-
-def path_setter():
-	if PATH == '':
-		PATH = input('Enter please directory path: ')
-		
+PATH = '~/'
