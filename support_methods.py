@@ -31,12 +31,8 @@ def only_astF_instances(array):
 
 
 def filter_only_py(file, from_path):
-    return os.path.join(from_path, extention_filter(file))
-
-
-def extention_filter(file, extention='.py'):
-    if file.endswith(extention):
-        return file
+    if file != None and file.endswith('.py'):
+        return os.path.join(from_path, file)
 
 
 def the_most_common_of(objects, top_size=10):
@@ -53,8 +49,8 @@ def getting_verbs(function_name):
 
 
 def is_private(thing):
-    if type(thing).__name__.startswith('__'):
-        if type(thing).__name__.endswith('__'):
+    if not type(thing).__name__.startswith('__'):
+        if not type(thing).__name__.endswith('__'):
             return type(thing).__name__
 
 
@@ -71,7 +67,6 @@ def getting_file_path(path_with_file):
 def path_setter(path=sys.argv):
     global PATH
     PATH = getting_file_path(os.path.realpath(__file__))
-    print PATH
     args = []
     args.append(path)
     args = filter(None, args)
@@ -80,7 +75,7 @@ def path_setter(path=sys.argv):
         if args[1] == '-d':
             PATH = args[2]
     else:
-        inputed_value = raw_input('''You didn\'t provide working directory,
+        inputed_value = raw_input('''You didn\'t specify the directory you want to scan,
                                      may I offer current directory?: y/n?\n''')
         if inputed_value == 'y':
             PATH = getting_file_path(os.path.realpath(__file__))

@@ -1,6 +1,5 @@
-# import sys
+import os
 import ast
-# import os
 import logging
 # from constants import *
 from support_methods import *
@@ -11,10 +10,8 @@ def __test_method__():
 
 
 def find_py_files(from_path=None):
-    if from_path == (None or ' ' or ''):
-        # from_path = path_setter()
-        from_path = getting_file_path(os.path.realpath(__file__))
-        print from_path
+    if from_path == None or ' ' or '':
+        from_path = path_setter()
     files_list = []
     for whole_path, dirs, files in os.walk(from_path, topdown=True):
         for file in files:
@@ -34,7 +31,7 @@ def get_trees(files):
         try:
             tree = ast.parse(file_content)
         except SyntaxError as e:
-            logging.error(e)
+            # logging.error(e)
             tree = None
         trees.append(tree)
     trees = filter(None, trees)
@@ -70,7 +67,8 @@ def get_common_verbs_across(projects):
 def cascade():
     py_files = find_py_files()
     trees = get_trees(py_files)
-    return get_common_verbs(trees)
+    verbs = get_common_verbs(trees)
+    return the_most_common_of(verbs)
 
 common_verbs = cascade()
 print common_verbs
