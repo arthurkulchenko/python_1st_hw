@@ -1,8 +1,10 @@
 import os
 import ast
+import sys
 import logging
-# from constants import *
 from support_methods import *
+
+logging.basicConfig(level = logging.INFO)
 
 
 def __test_method__():
@@ -31,7 +33,7 @@ def get_trees(files):
         try:
             tree = ast.parse(file_content)
         except SyntaxError as e:
-            # logging.error(e)
+            logging.error("%s in get_trees method." % e)
             tree = None
         trees.append(tree)
     trees = filter(None, trees)
@@ -51,7 +53,9 @@ def get_common_verbs(trees):
 def cascade_call(path):
     py_files = find_py_files(path)
     trees = get_trees(py_files)
-    return get_common_verbs(trees)
+    result = get_common_verbs(trees)
+    logging.info(result)
+    return result
 
 #
 def get_common_verbs_across(projects):
@@ -68,10 +72,40 @@ def cascade():
     py_files = find_py_files()
     trees = get_trees(py_files)
     verbs = get_common_verbs(trees)
+    logging.info(the_most_common_of(verbs))
     return the_most_common_of(verbs)
 
-common_verbs = cascade()
-print common_verbs
+
+def switch_case_1():
+    dictionary = {
+        "-c": "cascade()",
+        "-h": "help_dialog()"
+    }
+    return dictionary
+
+
+def functionality(key):
+    dictionary = switch_case_1()
+    args = args_handler(key)
+    args_length = len(args)
+    if args_length >= 2:
+        eval(dictionary[stringify(args[1])])
+    elif args_length == 1:
+        help_dialog()
+    
+def help_dialog():
+    print "Hello I am a helper \n\n -h :call this helper \n -c :call the most common verbs in *py files"
+
+    
+
+functionality(sys.argv)
+
+
+
+
+
+
+
 
 
 

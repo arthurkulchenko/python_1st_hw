@@ -1,7 +1,7 @@
-import sys
 import os
-import ast
 import re
+import ast
+import sys
 import collections
 from constants import *
 from nltk import pos_tag, word_tokenize
@@ -64,13 +64,17 @@ def getting_file_path(path_with_file):
     return dir_path
 
 
+def args_handler(arguments):
+    args = []
+    args.append(arguments)
+    args = filter(None, args)
+    return list(flattening(args))
+
+
 def path_setter(path=sys.argv):
     global PATH
     PATH = getting_file_path(os.path.realpath(__file__))
-    args = []
-    args.append(path)
-    args = filter(None, args)
-    args = list(flattening(args))
+    args = args_handler(path)
     if len(args) >= 3:
         if args[1] == '-d':
             PATH = args[2]
@@ -83,3 +87,14 @@ def path_setter(path=sys.argv):
             inputed_value = raw_input('Please type in the path: \n')
             PATH = inputed_value
     return PATH
+
+
+def get_all_names(trees):
+    for t in trees:
+        names = [ node.id for node in ast.walk(t) if isinstance(node, ast.Name)]
+    return filter(None, names)
+
+
+def split_snake_case_names_into_words(from_list):
+    nested_array = [i.split('_') for i in from_list]
+    return list(flattening(nested_array))
