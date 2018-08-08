@@ -76,20 +76,19 @@ def cascade():
     return the_most_common_of(verbs)
 
 
-def switch_case_1():
+def switch_case_2(element):
     dictionary = {
         "-c": "cascade()",
         "-h": "help_dialog()"
     }
-    return dictionary
+    return dictionary.get(stringify(element))
 
 
 def functionality(key):
-    dictionary = switch_case_1()
     args = args_handler(key)
     args_length = len(args)
     if args_length >= 2:
-        eval(dictionary[stringify(args[1])])
+        eval(switch_case_2(args[1]))
     elif args_length == 1:
         help_dialog()
 
