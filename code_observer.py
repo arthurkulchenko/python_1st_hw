@@ -4,7 +4,7 @@ import sys
 import logging
 from support_methods import *
 
-logging.basicConfig(level = logging.INFO)
+logging.basicConfig(level=logging.INFO)
 
 
 def __test_method__():
@@ -57,7 +57,7 @@ def cascade_call(path):
     logging.info(result)
     return result
 
-#
+
 def get_common_verbs_across(projects):
     words = []
     for project in projects:
@@ -92,20 +92,11 @@ def functionality(key):
         eval(dictionary[stringify(args[1])])
     elif args_length == 1:
         help_dialog()
-    
-def help_dialog():
-    print "Hello I am a helper \n\n -h :call this helper \n -c :call the most common verbs in *py files"
 
-    
+
+def help_dialog():
+    print '''Hello I am a helper \n\n -h :call this helper \n
+            -c :call the most common verbs in *py files'''
+
 
 functionality(sys.argv)
-
-
-
-
-
-
-
-
-
-

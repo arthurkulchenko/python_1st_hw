@@ -3,7 +3,6 @@ import re
 import ast
 import sys
 import collections
-from constants import *
 from nltk import pos_tag, word_tokenize
 """, punkt"""
 
@@ -79,8 +78,12 @@ def path_setter(path=sys.argv):
         if args[1] == '-d':
             PATH = args[2]
     else:
-        inputed_value = raw_input('''You didn\'t specify the directory you want to scan,
-                                     may I offer current directory?: y/n?\n''')
+        inputed_value = raw_input('''You didn\'t specify
+                                     the
+                                     directory
+                                     you want to scan,
+                                     may I offer current
+                                     directory?: y/n?\n''')
         if inputed_value == 'y':
             PATH = getting_file_path(os.path.realpath(__file__))
         else:
@@ -91,8 +94,8 @@ def path_setter(path=sys.argv):
 
 def get_all_names(trees):
     for t in trees:
-        names = [ node.id for node in ast.walk(t) if isinstance(node, ast.Name)]
-    return filter(None, names)
+        n = [node.id for node in ast.walk(t) if isinstance(node, ast.Name)]
+    return filter(None, n)
 
 
 def split_snake_case_names_into_words(from_list):
