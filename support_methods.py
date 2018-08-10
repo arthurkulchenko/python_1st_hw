@@ -47,6 +47,16 @@ def getting_verbs(function_name):
     return [word for word in function_name.split('_') if is_verb(word)]
 
 
+def name_of(thing):
+    return type(thing).__name__
+
+
+def is_private_2(thing):
+    if not name_of(thing).startswith('__'):
+        if not name_of(thing).endswith('__'):
+            return name_of(thing).__name__
+
+
 def is_private(thing):
     if not type(thing).__name__.startswith('__'):
         if not type(thing).__name__.endswith('__'):
