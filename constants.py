@@ -1,6 +1,4 @@
-if __name__ == "__main__":
-    TOP_SIZE = 200
-
+TOP_SIZE = 200
 PATH = '~/'
 PROJECTS = [
                 'django',
