@@ -1,16 +1,9 @@
 <html>
-	<head>
-		<style type="text/css">
-		 .img{
-		 	margin: -70px -50px -123px 500px;
-		 	background: red;
-		 }
-		</style>
-	</head>
 	<body>
-		<img src="https://otus.ru/static/img/favicons/android-chrome-537x240.jpg" class="img">
+		<img src="https://otus.ru/static/img/favicons/android-chrome-537x240.jpg" class="img" style="margin: -70px -50px -123px 500px;">
 	</body>
 </html>
+
 
 ## Second homework
 ### Lesson tasks
@@ -18,7 +11,7 @@
 
  ✔︎ принимать все аргументы через консольный интерфейс. (v0.2.1)
  
- ✔︎ клонировать репозитории с Гитхаба;
+ ✔︎ клонировать репозитории с Гитхаба; (v0.2.2)
  
  ✘ выдавать статистику самых частых слов по глаголам или существительным (в зависимости от параметра отчёта);
  
