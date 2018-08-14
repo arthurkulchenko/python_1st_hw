@@ -63,6 +63,7 @@ def getting_file_path(path_with_file):
     return dir_path
 
 
+#NOTICE DEPRICATED
 def args_handler(arguments):
     args = []
     args.append(arguments)
