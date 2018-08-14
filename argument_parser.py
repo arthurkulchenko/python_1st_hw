@@ -1,16 +1,19 @@
+import os
 import argparse
+# from code_observer import *
+from support_methods import *
 
 parser = argparse.ArgumentParser(description='''
 	This proram can help you to count words in your file or in banch of files.\n\n
-	Please provide path to any (or only *py in this realization) file or directory.
+	Please provide path to any (or only *py in this realization) directory.
 											 ''')
 
 parser.add_argument(
 					'-p',
 					dest='path',
 					action='store',
-					default='local',
-					help=':path to the file (default: current direcrory)'
+					default=getting_file_path(),
+					help=':path to the directory (default: current direcrory)'
 					)
 
 parser.add_argument(
@@ -62,4 +65,3 @@ parser.add_argument(
 					)
 
 args = parser.parse_args()
-print(args.extention, args.path)

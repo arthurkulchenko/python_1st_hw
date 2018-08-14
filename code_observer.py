@@ -2,8 +2,8 @@ import os
 import ast
 import sys
 import logging
+import argument_parser
 from support_methods import *
-from argument_parser import *
 
 logging.basicConfig(level=logging.INFO)
 
@@ -85,20 +85,20 @@ def switch_case_2(element):
     return dictionary.get(stringify(element))
 
 
-def functionality(key):
-    args = args_handler(key)
-    args_length = len(args)
-    if args_length >= 2:
-        eval(switch_case_2(args[1]))
-    elif args_length == 1:
-        help_dialog()
+def run():
+    args = argument_parser.args
+    print args
+    # args = args_handler(key)
+    # args_length = len(args)
+    # if args_length >= 2:
+        # eval(switch_case_2(args[1]))
+    # elif args_length == 1:
+        # help_dialog()
 
 
+#NOTICE DEPRICATED
 def help_dialog():
     print '''
             Hello I am a helper \n\n 
         -h :call this helper \n
         -c :call the most common verbs in *py files'''
-
-
-functionality(sys.argv)

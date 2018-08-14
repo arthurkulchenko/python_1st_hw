@@ -57,7 +57,7 @@ def stringify(not_a_string):
     return "%s" % not_a_string
 
 
-def getting_file_path(path_with_file):
+def getting_file_path(path_with_file=os.path.realpath(__file__)):
     exclusion_regex = "[\/][\w]+['.'][\D]+"
     dir_path = re.split(exclusion_regex, path_with_file)[0]
     return dir_path
@@ -71,6 +71,7 @@ def args_handler(arguments):
     return list(flattening(args))
 
 
+#NOTICE DEPRICATED
 def path_setter(path=sys.argv):
     global PATH
     PATH = getting_file_path(os.path.realpath(__file__))
