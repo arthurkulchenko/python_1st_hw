@@ -11,6 +11,7 @@
 		<img src="https://otus.ru/static/img/favicons/android-chrome-537x240.jpg" class="img">
 	</body>
 </html>
+
 ## Second homework
 ### Lesson tasks
 Нужно доработать скрипт из первого задания. Вот что он должен уметь:
