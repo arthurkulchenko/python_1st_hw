@@ -1,3 +1,4 @@
+
 import os
 import argparse
 # from code_observer import *
@@ -12,7 +13,7 @@ parser.add_argument(
 					'-p',
 					dest='path',
 					action='store',
-					default=getting_file_path(),
+					default=get_current_dir_path(),
 					help=':path to the directory (default: current direcrory)'
 					)
 

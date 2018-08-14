@@ -29,8 +29,8 @@ def only_astF_instances(array):
     return filter(None, node_list)
 
 
-def filter_only_py(file, from_path):
-    if file != None and file.endswith('.py'):
+def extention_only(file, from_path, extention):
+    if file != None and file.endswith(extention):
         return os.path.join(from_path, file)
 
 
@@ -57,7 +57,7 @@ def stringify(not_a_string):
     return "%s" % not_a_string
 
 
-def getting_file_path(path_with_file=os.path.realpath(__file__)):
+def get_current_dir_path(path_with_file=os.path.realpath(__file__)):
     exclusion_regex = "[\/][\w]+['.'][\D]+"
     dir_path = re.split(exclusion_regex, path_with_file)[0]
     return dir_path
@@ -74,7 +74,7 @@ def args_handler(arguments):
 #NOTICE DEPRICATED
 def path_setter(path=sys.argv):
     global PATH
-    PATH = getting_file_path(os.path.realpath(__file__))
+    PATH = get_current_dir_path(os.path.realpath(__file__))
     args = args_handler(path)
     if len(args) >= 3:
         if args[1] == '-d':
@@ -84,7 +84,7 @@ def path_setter(path=sys.argv):
             You didn\'t specify the directory you want
             to scan, may I offer current directory?: y/n?\n''')
         if inputed_value == 'y':
-            PATH = getting_file_path(os.path.realpath(__file__))
+            PATH = get_current_dir_path(os.path.realpath(__file__))
         else:
             inputed_value = raw_input('Please type in the path: \n')
             PATH = inputed_value

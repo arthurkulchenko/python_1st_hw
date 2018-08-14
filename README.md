@@ -33,7 +33,7 @@
 - сохранение в кучу разных форматов;
 - более сложные типы отчётов (не только частота частей речи в различных местах кода).
 
-[source](https://gist.github.com/Melevir/5754a1b553eb11839238e43734d0eb79)
+[source](https://github.com/arthurkulchenko/python_1st_hw)
 
 ### How to use
 To make use simply run `python scan_file.py` + `key` and `value`

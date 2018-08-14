@@ -12,17 +12,15 @@ def __test_method__():
     pass
 
 
-def find_py_files(from_path=None):
-    if from_path == None or ' ' or '':
-        from_path = path_setter()
+def find_files_by_extention(from_path, extention):
     files_list = []
     for whole_path, dirs, files in os.walk(from_path, topdown=True):
         for file in files:
-            files_list.append(filter_only_py(file, whole_path))
+            files_list.append(extention_only(file, whole_path, extention))
             if len(files_list) >= 100:
                 break
     files_list = filter(None, files_list)
-    logging.info('Total finded *.py files amount is: %s' % len(files_list))
+    logging.info('Total found *.%s files amount is: %s' % (extention, len(files_list)))
     return files_list
 
 
@@ -52,7 +50,7 @@ def get_common_verbs(trees):
 
 
 def cascade_call(path):
-    py_files = find_py_files(path)
+    py_files = find_files_by_extention(path)
     trees = get_trees(py_files)
     result = get_common_verbs(trees)
     logging.info(result)
@@ -70,7 +68,7 @@ def get_common_verbs_across(projects):
 
 
 def cascade():
-    py_files = find_py_files()
+    py_files = find_files_by_extention()
     trees = get_trees(py_files)
     verbs = get_common_verbs(trees)
     logging.info(the_most_common_of(verbs))
@@ -85,9 +83,9 @@ def switch_case_2(element):
     return dictionary.get(stringify(element))
 
 
-def run():
-    args = argument_parser.args
-    print args
+def run(args=argument_parser.args):
+    files = find_files_by_extention(args.path, args.extention)
+    # output    = *output defining*
     # args = args_handler(key)
     # args_length = len(args)
     # if args_length >= 2:
