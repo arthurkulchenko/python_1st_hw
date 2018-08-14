@@ -1,6 +1,7 @@
 import os
 import re
 import ast
+import git
 import sys
 import collections
 from nltk import pos_tag, word_tokenize
@@ -100,3 +101,14 @@ def get_all_names(trees):
 def split_snake_case_names_into_words(from_list):
     nested_array = [i.split('_') for i in from_list]
     return list(flattening(nested_array))
+
+
+def git_clone(repo, destination, required_branch='master'):
+    repo_name_re = re.search("[\w]+['.'][git]+", repo).group(0)
+    folder_name = re.split("[.][\w]+", repo_name_re)[0]
+    git.Repo.clone_from(
+                        repo,
+                        destination+'/'+folder_name+'/'+required_branch,
+                        branch=required_branch
+                        )
+    return destination+'/'+folder_name+'/'+required_branch

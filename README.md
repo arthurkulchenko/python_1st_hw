@@ -18,7 +18,7 @@
 
  ✔︎ принимать все аргументы через консольный интерфейс. (v0.2.1)
  
- ✘ клонировать репозитории с Гитхаба;
+ ✔︎ клонировать репозитории с Гитхаба;
  
  ✘ выдавать статистику самых частых слов по глаголам или существительным (в зависимости от параметра отчёта);
  
@@ -38,3 +38,7 @@
 ### How to use
 To make use simply run `python scan_file.py` + `key` and `value`
 for very beginnig you can try `-h` or just skip any of keys.
+
+### Requirements
+
+- gitpython should be installed

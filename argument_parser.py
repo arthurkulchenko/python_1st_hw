@@ -37,8 +37,8 @@ parser.add_argument(
 					'-s',
 					dest='source',
 					action='store',
-					default='github',
-					help=':external repo "default: github"'
+					default='none',
+					help=':clone external repo "default: github"'
 					)
 
 parser.add_argument(

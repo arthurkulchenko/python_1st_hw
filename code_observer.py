@@ -75,6 +75,7 @@ def cascade():
     return the_most_common_of(verbs)
 
 
+#NOTICE DEPRICATED
 def switch_case_2(element):
     dictionary = {
         "-c": "cascade()",
@@ -84,7 +85,12 @@ def switch_case_2(element):
 
 
 def run(args=argument_parser.args):
-    files = find_files_by_extention(args.path, args.extention)
+    if args.source is not 'none':
+        location = git_clone(args.source, args.path)
+        logging.info('Repo downloaded to: '+location)
+    else:
+        location = args.path
+    files = find_files_by_extention(location, args.extention)
     # output    = *output defining*
     # args = args_handler(key)
     # args_length = len(args)
