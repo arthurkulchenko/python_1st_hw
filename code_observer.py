@@ -94,8 +94,10 @@ def functionality(key):
 
 
 def help_dialog():
-    print '''Hello I am a helper \n\n -h :call this helper \n
-            -c :call the most common verbs in *py files'''
+    print '''
+            Hello I am a helper \n\n 
+        -h :call this helper \n
+        -c :call the most common verbs in *py files'''
 
 
 functionality(sys.argv)

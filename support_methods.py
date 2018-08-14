@@ -78,12 +78,9 @@ def path_setter(path=sys.argv):
         if args[1] == '-d':
             PATH = args[2]
     else:
-        inputed_value = raw_input('''You didn\'t specify
-                                     the
-                                     directory
-                                     you want to scan,
-                                     may I offer current
-                                     directory?: y/n?\n''')
+        inputed_value = raw_input('''
+            You didn\'t specify the directory you want
+            to scan, may I offer current directory?: y/n?\n''')
         if inputed_value == 'y':
             PATH = getting_file_path(os.path.realpath(__file__))
         else:
