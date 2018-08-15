@@ -43,6 +43,7 @@ def get_trees(files):
     return trees
 
 
+# NOTICE DEPRICATED
 def get_common_verbs(trees):
     flatten_array = flattening(only_astF_instances(trees))
     functions_list = [stringify(is_private(f)) for f in flatten_array]
@@ -52,6 +53,7 @@ def get_common_verbs(trees):
     return list(flattening(g))
 
 
+# NOTICE DEPRICATED
 def cascade_call(path):
     py_files = find_files_by_extention(path)
     trees = get_trees(py_files)
@@ -60,6 +62,7 @@ def cascade_call(path):
     return result
 
 
+# NOTICE DEPRICATED
 def get_common_verbs_across(projects):
     words = []
     for project in projects:
@@ -70,6 +73,7 @@ def get_common_verbs_across(projects):
         logging.info(word, occurence)
 
 
+# NOTICE DEPRICATED
 def cascade():
     py_files = find_files_by_extention()
     trees = get_trees(py_files)
@@ -78,19 +82,13 @@ def cascade():
     return the_most_common_of(verbs)
 
 
-#NOTICE DEPRICATED
+# NOTICE DEPRICATED
 def switch_case_2(element):
     dictionary = {
         "-c": "cascade()",
         "-h": "help_dialog()"
     }
     return dictionary.get(stringify(element))
-
-
-def to_json(object):
-    obj = dict((x,y) for x, y in object)
-    json_result = json.dumps(obj, outfile)
-    loaded_json = json.loads(json_result)
 
 
 def run(args=argument_parser.args):
@@ -100,7 +98,25 @@ def run(args=argument_parser.args):
     else:
         location = args.path
     files = find_files_by_extention(location, args.extention)
-    result = the_most_common_of(get_common_verbs(get_trees(files)))
+    if args.entities == 'functions':
+        logging.info('Looking in functions')
+        entity = node_names(get_trees(files))
+        print entity
+    else:
+        entity = variables_names(get_trees(files))
+        print entity
+        logging.info('Looking in variables')
+    if args.part_of_speech == 'verbs':
+        
+        result = search_verbs(entity)
+        print entity
+        logging.info('Looking for verbs')
+    else:
+        result = search_noun(entity)
+        print entity
+        logging.info('Looking for noun')
+    entity = result
+    result = the_most_common_of(entity, len(entity))
     dictionary = dict((x,y) for x, y in result)
     if args.output == 'json':
         with open('result.json', 'w') as json_file:
@@ -111,7 +127,7 @@ def run(args=argument_parser.args):
             csv_result.writerow(result)
 
 
-#NOTICE DEPRICATED
+# NOTICE DEPRICATED
 def help_dialog():
     print '''
             Hello I am a helper \n\n 

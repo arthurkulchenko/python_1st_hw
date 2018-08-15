@@ -1,4 +1,4 @@
-
+	
 import os
 import argparse
 # from code_observer import *
@@ -42,27 +42,20 @@ parser.add_argument(
 					)
 
 parser.add_argument(
-					'-w',
-					dest='words',
+					'-en',
+					dest='entities',
 					action='store',
 					default='functions',
 					help=':search for the most common words in functions or variables names'
 					)
 
 parser.add_argument(
-					'-v',
-					dest='verbs',
+					'-ps',
+					dest='part_of_speech',
 					action='store',
-					default='functions',
-					help=':statistic about amount of VERBS in functions or variables names'
+					default='verbs',
+					help=':statistic about amount of VERBS and NOUNS in functions and variables names, default: verbs'
 					)
 
-parser.add_argument(
-					'-n',
-					dest='noun',
-					action='store',
-					default='functions',
-					help=':statistic about amount of NOUN in functions or variables names'
-					)
 
 args = parser.parse_args()

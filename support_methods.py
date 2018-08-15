@@ -25,6 +25,14 @@ def is_verb(word=None):
         return pos_info[0][1] in ('VB', 'VBD', 'VBZ', 'VBN')
 
 
+def is_noun(word=None):
+    if word is None:
+        return False
+    else:
+        pos_info = pos_tag(word_tokenize(word))
+        return pos_info[0][1] in ('NN')
+
+
 def only_astF_instances(array):
     node_list = [map(is_astF_instance_filter(y), ast.walk(y)) for y in array]
     return filter(None, node_list)
@@ -35,7 +43,7 @@ def extention_only(file, from_path, extention):
         return os.path.join(from_path, file)
 
 
-def the_most_common_of(objects, top_size=10):
+def the_most_common_of(objects, top_size=100):
     return collections.Counter(objects).most_common(top_size)
 
 
@@ -50,9 +58,9 @@ def getting_verbs(function_name):
 
 def is_private(thing):
     if not type(thing).__name__.startswith('__'):
-        if not type(thing).__name__.endswith('__'):
-            return type(thing).__name__
-
+        return type(thing).__name__
+        # if not type(thing).__name__.endswith('__'):
+            
 
 def stringify(not_a_string):
     return "%s" % not_a_string
@@ -64,7 +72,7 @@ def get_current_dir_path(path_with_file=os.path.realpath(__file__)):
     return dir_path
 
 
-#NOTICE DEPRICATED
+# NOTICE DEPRICATED
 def args_handler(arguments):
     args = []
     args.append(arguments)
@@ -72,7 +80,7 @@ def args_handler(arguments):
     return list(flattening(args))
 
 
-#NOTICE DEPRICATED
+# NOTICE DEPRICATED
 def path_setter(path=sys.argv):
     global PATH
     PATH = get_current_dir_path(os.path.realpath(__file__))
@@ -92,14 +100,14 @@ def path_setter(path=sys.argv):
     return PATH
 
 
-def get_all_names(trees):
+def variables_names(trees):
     for t in trees:
         n = [node.id for node in ast.walk(t) if isinstance(node, ast.Name)]
     return filter(None, n)
 
 
 def split_snake_case_names_into_words(from_list):
-    nested_array = [i.split('_') for i in from_list]
+    nested_array = [i.split('_') for i in from_list if (type(i) is not 'bool')]
     return list(flattening(nested_array))
 
 
@@ -112,3 +120,26 @@ def git_clone(repo, destination, required_branch='master'):
                         branch=required_branch
                         )
     return destination+'/'+folder_name+'/'+required_branch
+
+
+def node_names(array):
+    flat_array = flattening([list(ast.walk(y)) for y in array])
+    return [node.__class__.__name__ for node in flat_array]
+
+
+def search_verbs(array):
+    list = [is_verb(i) for i in array]
+    list = filter(None, list)
+    return split_snake_case_names_into_words(list)
+
+
+def search_noun(array):
+    list = [is_noun(i) for i in array]
+    list = filter(None, list)
+    return split_snake_case_names_into_words(list)
+
+
+# def to_json(object):
+#     obj = dict((x,y) for x, y in object)
+#     json_result = json.dumps(obj, outfile)
+#     loaded_json = json.loads(json_result)
