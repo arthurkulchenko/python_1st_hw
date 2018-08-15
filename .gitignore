@@ -1,3 +1,5 @@
 skratches
 *.log
 *.pyc
+*.json
+*.csv

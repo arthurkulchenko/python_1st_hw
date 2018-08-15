@@ -1,7 +1,10 @@
 import os
 import ast
 import sys
+import csv
+import json
 import logging
+from itertools import izip
 import argument_parser
 from support_methods import *
 
@@ -84,6 +87,12 @@ def switch_case_2(element):
     return dictionary.get(stringify(element))
 
 
+def to_json(object):
+    obj = dict((x,y) for x, y in object)
+    json_result = json.dumps(obj, outfile)
+    loaded_json = json.loads(json_result)
+
+
 def run(args=argument_parser.args):
     if args.source is not 'none':
         location = git_clone(args.source, args.path)
@@ -91,13 +100,15 @@ def run(args=argument_parser.args):
     else:
         location = args.path
     files = find_files_by_extention(location, args.extention)
-    # output    = *output defining*
-    # args = args_handler(key)
-    # args_length = len(args)
-    # if args_length >= 2:
-        # eval(switch_case_2(args[1]))
-    # elif args_length == 1:
-        # help_dialog()
+    result = the_most_common_of(get_common_verbs(get_trees(files)))
+    dictionary = dict((x,y) for x, y in result)
+    if args.output == 'json':
+        with open('result.json', 'w') as json_file:
+            json_result = json.dump(dictionary, json_file)
+    elif args.output == 'csv':
+        with open('result.csv', 'wb') as csv_file:
+            csv_result = csv.writer(csv_file, quoting=csv.QUOTE_ALL)
+            csv_result.writerow(result)
 
 
 #NOTICE DEPRICATED
