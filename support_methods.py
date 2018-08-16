@@ -3,8 +3,11 @@ import re
 import ast
 import git
 import sys
+import csv
+import json
 import collections
 from lang_work import *
+from constants import FILES_AMOUNT
 
 
 def flattening(l):
@@ -26,7 +29,7 @@ def extention_only(file, from_path, extention):
         return os.path.join(from_path, file)
 
 
-def the_most_common_of(objects, top_size=100):
+def the_most_common_of(objects, top_size=FILES_AMOUNT):
     return collections.Counter(objects).most_common(top_size)
 
 
@@ -45,34 +48,6 @@ def get_current_dir_path(path_with_file=os.path.realpath(__file__)):
     exclusion_regex = "[\/][\w]+['.'][\D]+"
     dir_path = re.split(exclusion_regex, path_with_file)[0]
     return dir_path
-
-
-# NOTICE DEPRICATED
-def args_handler(arguments):
-    args = []
-    args.append(arguments)
-    args = filter(None, args)
-    return list(flattening(args))
-
-
-# NOTICE DEPRICATED
-def path_setter(path=sys.argv):
-    global PATH
-    PATH = get_current_dir_path(os.path.realpath(__file__))
-    args = args_handler(path)
-    if len(args) >= 3:
-        if args[1] == '-d':
-            PATH = args[2]
-    else:
-        inputed_value = raw_input('''
-            You didn\'t specify the directory you want
-            to scan, may I offer current directory?: y/n?\n''')
-        if inputed_value == 'y':
-            PATH = get_current_dir_path(os.path.realpath(__file__))
-        else:
-            inputed_value = raw_input('Please type in the path: \n')
-            PATH = inputed_value
-    return PATH
 
 
 def variables_names(trees):
@@ -102,7 +77,21 @@ def node_names(array):
     return [node.__class__.__name__ for node in flat_array]
 
 
-# def to_json(object):
-#     obj = dict((x,y) for x, y in object)
-#     json_result = json.dumps(obj, outfile)
-#     loaded_json = json.loads(json_result)
+def location_determining(source, path):
+    if source is not 'none':
+        location = git_clone(source, path)
+    else:
+        location = path
+    return location
+
+
+def output_method(data_format, data):
+    if data_format == 'json':
+        with open('result.json', 'w') as json_file:
+            json_result = json.dump(data, json_file)
+    elif data_format == 'csv':
+        with open('result.csv', 'wb') as csv_file:
+            csv_result = csv.writer(csv_file, quoting=csv.QUOTE_ALL)
+            csv_result.writerow(result)
+    else:
+        logging.info(data)

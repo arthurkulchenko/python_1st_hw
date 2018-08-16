@@ -1,19 +1,12 @@
 import os
 import ast
-import sys
-import csv
-import json
 import logging
 from constants import FILES_AMOUNT
-from itertools import izip
+# from itertools import izip
 import argument_parser
 from support_methods import *
 
 logging.basicConfig(level=logging.INFO)
-
-
-def __test_method__():
-    pass
 
 
 def find_files_by_extention(from_path, extention):
@@ -44,98 +37,19 @@ def get_trees(files):
     return trees
 
 
-# NOTICE DEPRICATED
-def get_common_verbs(trees):
-    flatten_array = flattening(only_astF_instances(trees))
-    functions_list = [stringify(is_private(f)) for f in flatten_array]
-    functions_list = filter(None, functions_list)
-    logging.info('functions extracted')
-    g = [getting_verbs(function_name) for function_name in functions_list]
-    return list(flattening(g))
-
-
-# NOTICE DEPRICATED
-def cascade_call(path):
-    py_files = find_files_by_extention(path)
-    trees = get_trees(py_files)
-    result = get_common_verbs(trees)
-    logging.info(result)
-    return result
-
-
-# NOTICE DEPRICATED
-def get_common_verbs_across(projects):
-    words = []
-    for project in projects:
-        path = os.path.join('.', project)
-        words.append(cascade_call(path))
-    logging.info('total %s words, %s unique' % (len(words), len(set(words))))
-    for word, occurence in the_most_common(words):
-        logging.info(word, occurence)
-
-
-# NOTICE DEPRICATED
-def cascade():
-    py_files = find_files_by_extention()
-    trees = get_trees(py_files)
-    verbs = get_common_verbs(trees)
-    logging.info(the_most_common_of(verbs))
-    return the_most_common_of(verbs)
-
-
-# NOTICE DEPRICATED
-def switch_case_2(element):
-    dictionary = {
-        "-c": "cascade()",
-        "-h": "help_dialog()"
-    }
-    return dictionary.get(stringify(element))
-
-
-def location_determining(source, path):
-    if source is not 'none':
-        location = git_clone(source, path)
-    else:
-        location = path
-    return location
-
-
 def run(args=argument_parser.args):
     location = location_determining(args.source, args.path)
     files = find_files_by_extention(location, args.extention)
     if args.entities == 'functions':
-        logging.info('Looking in functions')
         entity = node_names(get_trees(files))
     else:
         entity = variables_names(get_trees(files))
-        logging.info('Looking in variables')
+    logging.info('Looking in %s' % args.entities)
     if args.part_of_speech == 'verbs':
         result = search_for_verbs(entity)
-        logging.info('Looking for verbs')
     else:
         result = search_for_noun(entity)
-        logging.info('Looking for noun')
-    entity = result
-    result = the_most_common_of(entity, len(entity))
-    dictionary = dict((x,y) for x, y in result)
+    logging.info('Looking for %s' % args.part_of_speech)
+    semi_result = the_most_common_of(entity, len(result))
+    dictionary = dict((x,y) for x, y in semi_result)
     output_method(args.output, dictionary)
-    
-
-def output_method(data_format, data):
-    if data_format == 'json':
-        with open('result.json', 'w') as json_file:
-            json_result = json.dump(data, json_file)
-    elif data_format == 'csv':
-        with open('result.csv', 'wb') as csv_file:
-            csv_result = csv.writer(csv_file, quoting=csv.QUOTE_ALL)
-            csv_result.writerow(result)
-    else:
-        logging.info(data)
-
-
-# NOTICE DEPRICATED
-def help_dialog():
-    print '''
-            Hello I am a helper \n\n 
-        -h :call this helper \n
-        -c :call the most common verbs in *py files'''

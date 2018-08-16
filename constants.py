@@ -9,3 +9,7 @@ PROJECTS = [
                 'requests',
                 'sqlalchemy'
             ]
+
+
+def __test_method__():
+    pass
