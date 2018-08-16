@@ -4,8 +4,7 @@ import ast
 import git
 import sys
 import collections
-from nltk import pos_tag, word_tokenize
-""", punkt"""
+from lang_work import *
 
 
 def flattening(l):
@@ -15,22 +14,6 @@ def flattening(l):
                 yield sub
         else:
             yield e
-
-
-def is_verb(word=None):
-    if word is None:
-        return False
-    else:
-        pos_info = pos_tag(word_tokenize(word))
-        return pos_info[0][1] in ('VB', 'VBD', 'VBZ', 'VBN')
-
-
-def is_noun(word=None):
-    if word is None:
-        return False
-    else:
-        pos_info = pos_tag(word_tokenize(word))
-        return pos_info[0][1] in ('NN')
 
 
 def only_astF_instances(array):
@@ -52,18 +35,10 @@ def is_astF_instance_filter(node):
         return node.name.lower()
 
 
-def getting_verbs(function_name):
-    return [word for word in function_name.split('_') if is_verb(word)]
-
-
 def is_private(thing):
     if not type(thing).__name__.startswith('__'):
         return type(thing).__name__
         # if not type(thing).__name__.endswith('__'):
-            
-
-def stringify(not_a_string):
-    return "%s" % not_a_string
 
 
 def get_current_dir_path(path_with_file=os.path.realpath(__file__)):
@@ -101,42 +76,30 @@ def path_setter(path=sys.argv):
 
 
 def variables_names(trees):
+    n = []
     for t in trees:
-        n = [node.id for node in ast.walk(t) if isinstance(node, ast.Name)]
-    return filter(None, n)
-
-
-def split_snake_case_names_into_words(from_list):
-    nested_array = [i.split('_') for i in from_list if (type(i) is not 'bool')]
-    return list(flattening(nested_array))
+        n.append([node.id for node in ast.walk(t) if isinstance(node, ast.Name)])
+    variables = list(flattening(n))
+    variables = filter(None, variables)
+    return variables
 
 
 def git_clone(repo, destination, required_branch='master'):
     repo_name_re = re.search("[\w]+['.'][git]+", repo).group(0)
     folder_name = re.split("[.][\w]+", repo_name_re)[0]
+    location = destination+'/'+folder_name+'/'+required_branch
     git.Repo.clone_from(
                         repo,
-                        destination+'/'+folder_name+'/'+required_branch,
+                        location,
                         branch=required_branch
                         )
-    return destination+'/'+folder_name+'/'+required_branch
+    logging.info('Repo downloaded to: '+location)
+    return location
 
 
 def node_names(array):
     flat_array = flattening([list(ast.walk(y)) for y in array])
     return [node.__class__.__name__ for node in flat_array]
-
-
-def search_verbs(array):
-    list = [is_verb(i) for i in array]
-    list = filter(None, list)
-    return split_snake_case_names_into_words(list)
-
-
-def search_noun(array):
-    list = [is_noun(i) for i in array]
-    list = filter(None, list)
-    return split_snake_case_names_into_words(list)
 
 
 # def to_json(object):

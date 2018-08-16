@@ -4,6 +4,7 @@ import sys
 import csv
 import json
 import logging
+from constants import FILES_AMOUNT
 from itertools import izip
 import argument_parser
 from support_methods import *
@@ -20,7 +21,7 @@ def find_files_by_extention(from_path, extention):
     for whole_path, dirs, files in os.walk(from_path, topdown=True):
         for file in files:
             files_list.append(extention_only(file, whole_path, extention))
-            if len(files_list) >= 100:
+            if len(files_list) >= FILES_AMOUNT:
                 break
     files_list = filter(None, files_list)
     logging.info('Total found *.%s files amount is: %s' % (extention, len(files_list)))
@@ -91,40 +92,45 @@ def switch_case_2(element):
     return dictionary.get(stringify(element))
 
 
-def run(args=argument_parser.args):
-    if args.source is not 'none':
-        location = git_clone(args.source, args.path)
-        logging.info('Repo downloaded to: '+location)
+def location_determining(source, path):
+    if source is not 'none':
+        location = git_clone(source, path)
     else:
-        location = args.path
+        location = path
+    return location
+
+
+def run(args=argument_parser.args):
+    location = location_determining(args.source, args.path)
     files = find_files_by_extention(location, args.extention)
     if args.entities == 'functions':
         logging.info('Looking in functions')
         entity = node_names(get_trees(files))
-        print entity
     else:
         entity = variables_names(get_trees(files))
-        print entity
         logging.info('Looking in variables')
     if args.part_of_speech == 'verbs':
-        
-        result = search_verbs(entity)
-        print entity
+        result = search_for_verbs(entity)
         logging.info('Looking for verbs')
     else:
-        result = search_noun(entity)
-        print entity
+        result = search_for_noun(entity)
         logging.info('Looking for noun')
     entity = result
     result = the_most_common_of(entity, len(entity))
     dictionary = dict((x,y) for x, y in result)
-    if args.output == 'json':
+    output_method(args.output, dictionary)
+    
+
+def output_method(data_format, data):
+    if data_format == 'json':
         with open('result.json', 'w') as json_file:
-            json_result = json.dump(dictionary, json_file)
-    elif args.output == 'csv':
+            json_result = json.dump(data, json_file)
+    elif data_format == 'csv':
         with open('result.csv', 'wb') as csv_file:
             csv_result = csv.writer(csv_file, quoting=csv.QUOTE_ALL)
             csv_result.writerow(result)
+    else:
+        logging.info(data)
 
 
 # NOTICE DEPRICATED

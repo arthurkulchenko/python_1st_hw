@@ -28,7 +28,7 @@
 
 ### How to use
 To make use simply run `python scan_file.py` + `key` and `value`
-for very beginnig you can try `-h` or just skip any of keys.
+for very beginnig you can try `-h`.
 
 ### Requirements
 
