@@ -108,3 +108,18 @@ def search_for_noun(array):
 
 def getting_verbs(function_name):
     return [word for word in function_name.split('_') if is_verb(word)]
+
+
+def getting_rid_of_underscore_in(_word_):
+    result = re.split("[\_]+", _word_)
+    return filter(None, result)[0]
+
+
+def is_private(thing):
+    if not type(thing).__name__.startswith('__'):
+        return type(thing).__name__
+        # if not type(thing).__name__.endswith('__'):
+
+
+def stringify(not_a_string):
+    return "%s" % not_a_string

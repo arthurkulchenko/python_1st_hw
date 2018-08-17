@@ -1,7 +1,6 @@
 import os
 import ast
 import logging
-from constants import FILES_AMOUNT
 import argument_parser
 from support_methods import *
 
@@ -15,40 +14,28 @@ def find_files_by_extention(from_path, extention, amount):
             files_list.append(extention_only(file, whole_path, extention))
             if len(files_list) >= amount:
                 break
-    files_list = filter(None, files_list)
-    logging.info('Total found *.%s files amount is: %s' % (extention, len(files_list)))
-    return files_list
+    list = filter(None, files_list)
+    logging.info('Found %s *.%s files' % (len(list), extention))
+    return list
 
 
-def get_trees(files):
-    trees = []
-    for file in files:
-        with open(file, 'r') as file_viewer:
-            file_content = file_viewer.read()
-        try:
-            tree = ast.parse(file_content)
-        except SyntaxError as e:
-            logging.error("%s in get_trees method." % e)
-            tree = None
-        trees.append(tree)
+def get_nodes(files):
+    trees = [ast_file_parser(f) for f in files]
     trees = filter(None, trees)
-    logging.info('trees generated')
-    return trees
+    nodes = list(flattening([ast.walk(t) for t in trees]))
+    return nodes
 
 
 def run(args=argument_parser.args):
     location = location_determining(args.source, args.path)
     files = find_files_by_extention(location, args.extention, args.amount)
     if args.entities == 'functions':
-        entity = node_names(get_trees(files))
+        entity_list = functions_names(get_nodes(files))
     else:
-        entity = variables_names(get_trees(files))
-    logging.info('Looking in %s' % args.entities)
-    if args.part_of_speech == 'verbs':
-        result = search_for_verbs(entity)
-    else:
-        result = search_for_noun(entity)
+        entity_list = variables_names(get_nodes(files))
+    logging.info('Searching in %s...' % args.entities)
+    words = search_in(entity_list, args.part_of_speech)
     logging.info('Looking for %s' % args.part_of_speech)
-    semi_result = the_most_common_of(entity, len(result))
-    dictionary = dict((x,y) for x, y in semi_result)
+    semi_result = the_most_common_of(words, len(words))
+    dictionary = dict((x, y) for x, y in semi_result)
     output_method(args.output, dictionary)
