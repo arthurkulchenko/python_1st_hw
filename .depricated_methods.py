@@ -1,4 +1,4 @@
-# NOTICE DEPRICATED
+
 def args_handler(arguments):
     args = []
     args.append(arguments)
@@ -6,7 +6,6 @@ def args_handler(arguments):
     return list(flattening(args))
 
 
-# NOTICE DEPRICATED
 def path_setter(path=sys.argv):
     global PATH
     PATH = get_current_dir_path(os.path.realpath(__file__))
@@ -26,7 +25,6 @@ def path_setter(path=sys.argv):
     return PATH
 
 
-# NOTICE DEPRICATED
 def get_common_verbs(trees):
     flatten_array = flattening(only_astF_instances(trees))
     functions_list = [stringify(is_private(f)) for f in flatten_array]
@@ -36,7 +34,6 @@ def get_common_verbs(trees):
     return list(flattening(g))
 
 
-# NOTICE DEPRICATED
 def cascade_call(path):
     py_files = find_files_by_extention(path)
     trees = get_trees(py_files)
@@ -45,7 +42,6 @@ def cascade_call(path):
     return result
 
 
-# NOTICE DEPRICATED
 def get_common_verbs_across(projects):
     words = []
     for project in projects:
@@ -56,7 +52,6 @@ def get_common_verbs_across(projects):
         logging.info(word, occurence)
 
 
-# NOTICE DEPRICATED
 def cascade():
     py_files = find_files_by_extention()
     trees = get_trees(py_files)
@@ -65,7 +60,6 @@ def cascade():
     return the_most_common_of(verbs)
 
 
-# NOTICE DEPRICATED
 def switch_case_2(element):
     dictionary = {
         "-c": "cascade()",
@@ -74,9 +68,43 @@ def switch_case_2(element):
     return dictionary.get(stringify(element))
 
 
-# NOTICE DEPRICATED
 def help_dialog():
     print '''
             Hello I am a helper \n\n 
         -h :call this helper \n
         -c :call the most common verbs in *py files'''
+
+
+def is_verb(word=None):
+    if word is None:
+        return False
+    else:
+        pos_info = pos_tag(word_tokenize(word))
+        return pos_info[0][1] in ('VB', 'VBD', 'VBZ', 'VBN')
+
+
+def is_noun(word=None):
+    print word
+    if word == (None or "" or " "):
+        return False
+    else:
+        pos_info = pos_tag(word_tokenize(word))
+        if pos_info[0][1] == ('NN'):
+            return word
+
+
+def search_for_verbs(array):
+    list = [is_verb(i) for i in array]
+    list = filter(None, list)
+    return split_snake_case(list)
+
+
+def search_for_noun(array):
+    words = split_snake_case(array)
+    list = [is_noun(i) for i in words]
+    list = filter(None, list)
+    return list
+
+
+def getting_verbs(function_name):
+    return [word for word in function_name.split('_') if is_verb(word)]

@@ -19,11 +19,6 @@ def flattening(l):
             yield e
 
 
-def only_astF_instances(array):
-    node_list = [map(is_astF_instance_filter(y), ast.walk(y)) for y in array]
-    return filter(None, node_list)
-
-
 def extention_only(file, from_path, extention):
     if file != None and file.endswith(extention):
         return os.path.join(from_path, file)
@@ -31,6 +26,11 @@ def extention_only(file, from_path, extention):
 
 def the_most_common_of(objects, top_size=FILES_AMOUNT):
     return collections.Counter(objects).most_common(top_size)
+
+
+def only_astF_instances(array):
+    node_list = [map(is_astF_instance_filter(y), ast.walk(y)) for y in array]
+    return filter(None, node_list)
 
 
 def is_astF_instance_filter(node):
@@ -59,6 +59,11 @@ def variables_names(trees):
     return variables
 
 
+def node_names(trees):
+    flat_array = flattening([list(ast.walk(y)) for y in trees])
+    return [node.__class__.__name__ for node in flat_array]
+
+
 def git_clone(repo, destination, required_branch='master'):
     repo_name_re = re.search("[\w]+['.'][git]+", repo).group(0)
     folder_name = re.split("[.][\w]+", repo_name_re)[0]
@@ -70,11 +75,6 @@ def git_clone(repo, destination, required_branch='master'):
                         )
     logging.info('Repo downloaded to: '+location)
     return location
-
-
-def node_names(array):
-    flat_array = flattening([list(ast.walk(y)) for y in array])
-    return [node.__class__.__name__ for node in flat_array]
 
 
 def location_determining(source, path):

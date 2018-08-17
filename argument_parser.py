@@ -1,6 +1,7 @@
 import os
 import argparse
 from support_methods import *
+from constants import FILES_AMOUNT
 
 parser = argparse.ArgumentParser(description='''
 	This proram can help you to count words in your file or in banch of files.\n\n
@@ -16,6 +17,7 @@ parser.add_argument(
 					help=':path to the directory (default: current direcrory)'
 					)
 
+
 parser.add_argument(
 					'-e',
 					dest='extention',
@@ -23,6 +25,7 @@ parser.add_argument(
 					default='py',
 					help=':file type (default: *.py)'
 					)
+
 
 parser.add_argument(
 					'-o',
@@ -32,6 +35,7 @@ parser.add_argument(
 					help=':choose output method console, json, csv'
 					)
 
+
 parser.add_argument(
 					'-s',
 					dest='source',
@@ -39,6 +43,7 @@ parser.add_argument(
 					default='none',
 					help=':clone external repo "default: github"'
 					)
+
 
 parser.add_argument(
 					'-en',
@@ -48,12 +53,22 @@ parser.add_argument(
 					help=':search for the most common words in functions or variables names'
 					)
 
+
 parser.add_argument(
 					'-ps',
 					dest='part_of_speech',
 					action='store',
 					default='verbs',
 					help=':statistic about amount of VERBS and NOUNS in functions and variables names, default: verbs'
+					)
+
+
+parser.add_argument(
+					'-a',
+					dest='amount',
+					action='store',
+					default=FILES_AMOUNT,
+					help=':max of observation list files, default: 100'
 					)
 
 
