@@ -112,14 +112,14 @@ def search_in(list, required_part_of_speech):
 
 def word_extraction(word, required_part_of_speech):
     tagged_word = pos_tag(word_tokenize(word))
-    if required_part_of_speech == 'verb' or 'verbs':
+    if required_part_of_speech in ('verb', 'verbs'):
         if tagged_word[0][1] in ('VB', 'VBD', 'VBZ', 'VBN', 'VBG'):
             return word
-    elif required_part_of_speech == 'noun' or 'nouns':
+    elif required_part_of_speech in ('noun', 'nouns'):
         if tagged_word[0][1] == ('NN'):
             return word
     else:
-        return 'Rather verb or noun'
+        return 'None'
 
 
 def split_snake_case_names_into_words(from_list):

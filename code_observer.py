@@ -20,10 +20,8 @@ def find_files_by_extention(from_path, extention, amount):
 
 
 def get_nodes(files):
-    trees = [ast_file_parser(f) for f in files]
-    trees = filter(None, trees)
-    nodes = list(flattening([ast.walk(t) for t in trees]))
-    return nodes
+    trees = filter(None, map(ast_file_parser, files))
+    return list(flattening([ast.walk(t) for t in trees]))
 
 
 def run(args=argument_parser.args):
